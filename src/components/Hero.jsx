@@ -89,7 +89,7 @@ export default function Hero() {
             { num: '100%', label: 'スクラッチ開発' },
           ].map((stat) => (
             <div key={stat.label} className="text-white">
-              <p className="text-4xl font-black text-cyan-400">{stat.num}</p>
+              <p className="text-4xl font-black text-white">{stat.num}</p>
               <p className="text-sm text-white/70 mt-1">{stat.label}</p>
             </div>
           ))}
@@ -107,7 +107,7 @@ export default function Hero() {
                 href={p.href}
                 className={`group flex items-start gap-3 p-4 rounded-xl border border-white/20 backdrop-blur-sm text-white transition-all duration-200 ${p.color}`}
               >
-                <div className="p-2 bg-white/10 rounded-lg mt-0.5 text-cyan-400">
+                <div className="p-2 bg-white/10 rounded-lg mt-0.5 text-white">
                   {p.icon}
                 </div>
                 <div>
