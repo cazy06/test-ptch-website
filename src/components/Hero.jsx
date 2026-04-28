@@ -64,9 +64,7 @@ export default function Hero() {
             テクノロジーで未来を描く、戦略的パートナーシップ
           </p>
           <p className="mt-4 text-base md:text-lg text-white/60 leading-relaxed max-w-2xl">
-            生成AI・伴走型開発・ZERO-SaaS（初期費用0円）で、あなたのビジネス課題を解決。
-            <br className="hidden md:block" />
-            丸投げではなく、一緒に考え、一緒に作る。それがポノテクのスタイルです。
+            生成AI・伴走型開発・ZERO-SaaS（初期費用0円）で、あなたのビジネス課題を解決。丸投げではなく、一緒に考え、一緒に作る。それがポノテクのスタイルです。
           </p>
         </div>
 
