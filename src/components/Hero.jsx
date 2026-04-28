@@ -58,7 +58,7 @@ export default function Hero() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
             ともに創り、
             <br />
-            <span className="text-cyan-400">ともに育てる。</span>
+            <span className="text-white">ともに育てる。</span>
           </h1>
           <p className="mt-6 text-xl md:text-2xl text-white/80 leading-relaxed font-medium">
             テクノロジーで未来を描く、戦略的パートナーシップ

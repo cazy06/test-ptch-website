@@ -61,9 +61,7 @@ export default function Process() {
                 }`}
               >
                 {/* Circle */}
-                <div className="absolute left-6 md:left-1/2 w-12 h-12 rounded-full flex items-center justify-center font-black text-white text-sm transform -translate-x-1/2 z-10 shadow-lg"
-                  style={{ background: `linear-gradient(135deg, #0A2463, #00C2CB)` }}
-                >
+                <div className="absolute left-6 md:left-1/2 w-12 h-12 rounded-full flex items-center justify-center font-black text-white text-sm transform -translate-x-1/2 z-10 shadow-lg bg-blue-900">
                   {step.num}
                 </div>
 
