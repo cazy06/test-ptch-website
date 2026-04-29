@@ -25,6 +25,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install MkDocs
+        run: pip install mkdocs-material
+      - name: Build docs
+        run: mkdocs build
+      - name: Move docs into dist
+        run: mv docs-site dist/docs-site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
