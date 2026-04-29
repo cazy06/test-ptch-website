@@ -41,6 +41,7 @@ nav:
   - 開発:
     - テックスタック: development/tech-stack.md
     - デプロイ手順: development/deployment.md
+    - 開発規約・命名ルール: development/conventions.md
   - 変更履歴: changelog.md
 
 markdown_extensions:

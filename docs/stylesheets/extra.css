@@ -4,3 +4,23 @@
   --md-primary-fg-color--dark: #071a47;
   --md-accent-fg-color: #FF8C42;
 }
+
+/* Journey map & wide tables: horizontal scroll */
+.md-typeset .scroll-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.md-typeset .scroll-table table {
+  min-width: 800px;
+  white-space: nowrap;
+}
+
+.md-typeset .scroll-table table td,
+.md-typeset .scroll-table table th {
+  white-space: normal;
+  min-width: 120px;
+  max-width: 220px;
+  vertical-align: top;
+}
