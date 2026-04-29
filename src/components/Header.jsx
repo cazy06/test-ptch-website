@@ -36,9 +36,11 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg gradient-navy flex items-center justify-center">
-              <span className="text-white font-black text-base">P</span>
-            </div>
+            <img
+              src="/test-ptch-website/logo.svg"
+              alt="PonoTech"
+              className="h-9 w-9 rounded-lg"
+            />
             <span className={`font-black text-xl tracking-tight transition-colors ${scrolled ? 'text-blue-900' : 'text-white'}`}>
               PonoTech
             </span>

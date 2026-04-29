@@ -33,9 +33,11 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-lg gradient-navy flex items-center justify-center">
-                <span className="text-white font-black text-base">P</span>
-              </div>
+              <img
+                src="/test-ptch-website/logo.svg"
+                alt="PonoTech"
+                className="h-9 w-9 rounded-lg"
+              />
               <span className="font-black text-xl text-white tracking-tight">PonoTech</span>
             </div>
             <p className="text-sm leading-relaxed">
