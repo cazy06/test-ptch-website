@@ -88,7 +88,7 @@ export default function Partner() {
               </ul>
               <div className="mt-8 p-5 bg-white/10 rounded-xl border border-white/20">
                 <p className="text-white/80 text-sm leading-relaxed">
-                  <strong className="text-cyan-400">初回相談は無料。</strong>
+                  <strong className="text-white">初回相談は無料。</strong>
                   まずは制度の説明をオンラインでお聞きいただけます。
                   お気軽にお問い合わせください。
                 </p>
