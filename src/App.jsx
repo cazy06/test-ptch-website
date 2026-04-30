@@ -23,22 +23,26 @@ const HEROES = {
   C: { label: '案C: Particles', component: HeroC },
 }
 
-function App() {
-  const [heroKey, setHeroKey] = useState('current')
+function App({ defaultHero = 'current' }) {
+  const [heroKey, setHeroKey] = useState(defaultHero)
   const HeroComponent = HEROES[heroKey].component
 
   return (
     <div className="min-h-screen">
-      {/* ── Hero switcher (dev-only floating pill) ── */}
+      {/* ── Hero switcher (preview floating pill) ── */}
       <div
         style={{
           position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
-          zIndex: 9999, display: 'flex', gap: 6, background: 'rgba(10,10,20,0.85)',
-          backdropFilter: 'blur(12px)', borderRadius: 999,
-          padding: '6px 10px', border: '1px solid rgba(255,255,255,0.15)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
+          zIndex: 9999, display: 'flex', alignItems: 'center', gap: 6,
+          background: 'rgba(10,10,20,0.88)', backdropFilter: 'blur(12px)',
+          borderRadius: 999, padding: '6px 10px',
+          border: '1px solid rgba(255,255,255,0.15)',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.5)', whiteSpace: 'nowrap',
         }}
       >
+        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', padding: '0 4px', letterSpacing: '0.05em' }}>
+          HERO PREVIEW
+        </span>
         {Object.entries(HEROES).map(([key, { label }]) => (
           <button
             key={key}
@@ -52,6 +56,25 @@ function App() {
           >
             {label}
           </button>
+        ))}
+        <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.15)', margin: '0 4px' }} />
+        {[
+          { href: '/test-ptch-website/hero-a/', label: 'A専用ページ' },
+          { href: '/test-ptch-website/hero-b/', label: 'B専用ページ' },
+          { href: '/test-ptch-website/hero-c/', label: 'C専用ページ' },
+        ].map(({ href, label }) => (
+          <a
+            key={href}
+            href={href}
+            style={{
+              padding: '5px 11px', borderRadius: 999, fontSize: 11, fontWeight: 600,
+              textDecoration: 'none', transition: 'all 0.15s',
+              background: 'rgba(62,146,204,0.18)', color: '#6fb8e8',
+              border: '1px solid rgba(62,146,204,0.3)',
+            }}
+          >
+            ↗ {label}
+          </a>
         ))}
       </div>
 
