@@ -89,7 +89,7 @@ export default function HeroC() {
       tick++
 
       // Background: dark navy, slight trail for motion blur
-      ctx.fillStyle = 'rgba(4, 13, 31, 0.82)'
+      ctx.fillStyle = 'rgba(17, 36, 88, 0.82)'
       ctx.fillRect(0, 0, W, H)
 
       const mx = mouseRef.current.x
@@ -200,7 +200,7 @@ export default function HeroC() {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden" style={{ background: '#040d1f' }}>
+    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden" style={{ background: '#112458' }}>
       {/* Canvas – interactive particle field */}
       <canvas
         ref={canvasRef}

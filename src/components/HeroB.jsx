@@ -1,8 +1,7 @@
 /**
- * Hero 案B — WebGL GLSL Fluid Shader
+ * Hero 案B — WebGL GLSL Fluid Shader (revised)
  * GPU上で動くノイズベースの流体グラデーション
- * ネイビー×シアン×オレンジが有機的に溶け合う、Stripeライクなプレミアム表現
- * 依存ゼロ・純粋WebGL
+ * value noise で [0,1] 値域を保証し確実に描画
  */
 import { useEffect, useRef } from 'react'
 import { ArrowRight, Zap, Users, Cpu } from 'lucide-react'
@@ -13,37 +12,33 @@ const personas = [
   { icon: <Zap size={20} />, label: 'パートナー企業の方', desc: '案件紹介・協業を検討中', href: '#partner' },
 ]
 
-const VERT = /* glsl */`
+const VERT = `
   attribute vec2 a_pos;
   void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
 `
 
-const FRAG = /* glsl */`
+// value noise (確実に [0,1] の値域)
+const FRAG = `
   precision highp float;
   uniform float u_time;
   uniform vec2  u_res;
 
-  // 2D simplex-like noise (compact version)
-  vec3 hash3(vec2 p) {
-    vec3 q = vec3(dot(p, vec2(127.1, 311.7)),
-                  dot(p, vec2(269.5, 183.3)),
-                  dot(p, vec2(419.2, 371.9)));
-    return fract(sin(q) * 43758.5453);
+  float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
   }
-  float noise(vec2 p) {
+  float vnoise(vec2 p) {
     vec2 i = floor(p);
     vec2 f = fract(p);
     vec2 u = f * f * (3.0 - 2.0 * f);
-    return mix(mix(dot(hash3(i + vec2(0,0)).xy, f - vec2(0,0)),
-                   dot(hash3(i + vec2(1,0)).xy, f - vec2(1,0)), u.x),
-               mix(dot(hash3(i + vec2(0,1)).xy, f - vec2(0,1)),
-                   dot(hash3(i + vec2(1,1)).xy, f - vec2(1,1)), u.x), u.y);
+    return mix(
+      mix(hash(i),            hash(i + vec2(1.0, 0.0)), u.x),
+      mix(hash(i + vec2(0.0,1.0)), hash(i + vec2(1.0,1.0)), u.x),
+      u.y
+    );
   }
   float fbm(vec2 p) {
     float v = 0.0; float a = 0.5;
-    for (int i = 0; i < 6; i++) {
-      v += a * noise(p); p *= 2.1; a *= 0.5;
-    }
+    for (int i = 0; i < 5; i++) { v += a * vnoise(p); p *= 2.1; a *= 0.5; }
     return v;
   }
 
@@ -51,33 +46,35 @@ const FRAG = /* glsl */`
     vec2 uv = gl_FragCoord.xy / u_res;
     uv.y = 1.0 - uv.y;
 
-    float t = u_time * 0.18;
+    float t = u_time * 0.12;
 
-    // Multi-layer FBM warping
-    vec2 q = vec2(fbm(uv + vec2(0.0, 0.0) + t * 0.3),
-                  fbm(uv + vec2(5.2, 1.3) + t * 0.25));
-    vec2 r = vec2(fbm(uv + 4.0 * q + vec2(1.7, 9.2) + t * 0.15),
-                  fbm(uv + 4.0 * q + vec2(8.3, 2.8) + t * 0.12));
-    float f = fbm(uv + 4.0 * r + t * 0.1);
+    // 2段階のドメインワーピングで有機的な流れを生成
+    vec2 q = vec2(fbm(uv * 2.0 + vec2(0.0,  0.0) + t),
+                  fbm(uv * 2.0 + vec2(5.2,  1.3) + t * 0.8));
+    vec2 r = vec2(fbm(uv * 2.0 + 3.5 * q + vec2(1.7, 9.2) + t * 0.5),
+                  fbm(uv * 2.0 + 3.5 * q + vec2(8.3, 2.8) + t * 0.4));
+    float f = fbm(uv * 1.8 + 3.0 * r + t * 0.3);
 
-    // Color palette: navy → blue → cyan → orange
-    vec3 navy  = vec3(0.039, 0.141, 0.388); // #0A2463
-    vec3 blue  = vec3(0.243, 0.573, 0.800); // #3E92CC
-    vec3 cyan  = vec3(0.000, 0.761, 0.796); // #00C2CB
-    vec3 orange= vec3(1.000, 0.549, 0.259); // #FF8C42
-    vec3 dark  = vec3(0.010, 0.030, 0.100);
+    // カラーパレット: #112458 ベースでネイビー→ブルー→シアン→オレンジ
+    vec3 base   = vec3(0.067, 0.141, 0.345); // #112458
+    vec3 navy   = vec3(0.039, 0.141, 0.388); // #0A2463
+    vec3 blue   = vec3(0.243, 0.573, 0.800); // #3E92CC
+    vec3 cyan   = vec3(0.000, 0.761, 0.796); // #00C2CB
+    vec3 orange = vec3(1.000, 0.549, 0.259); // #FF8C42
 
-    vec3 col = mix(dark,  navy,  smoothstep(0.0, 0.4, f));
-    col      = mix(col,   blue,  smoothstep(0.3, 0.6, f));
-    col      = mix(col,   cyan,  smoothstep(0.55, 0.75, f));
-    col      = mix(col,   orange,smoothstep(0.72, 0.88, f));
+    vec3 col = base;
+    col = mix(col,   navy,   smoothstep(0.20, 0.42, f));
+    col = mix(col,   blue,   smoothstep(0.40, 0.60, f));
+    col = mix(col,   cyan,   smoothstep(0.58, 0.72, f));
+    col = mix(col,   orange, smoothstep(0.70, 0.85, f));
 
-    // Subtle vignette
-    float vign = 1.0 - dot(uv - 0.5, uv - 0.5) * 1.4;
-    col *= clamp(vign, 0.0, 1.0);
+    // ビニエット
+    vec2 vc = uv - 0.5;
+    float vign = 1.0 - dot(vc, vc) * 1.6;
+    col *= clamp(vign, 0.2, 1.0);
 
-    // Bottom fade to white
-    float fadeY = smoothstep(0.0, 0.14, uv.y);
+    // 下端を白にフェード
+    float fadeY = smoothstep(0.0, 0.15, uv.y);
     col = mix(vec3(1.0), col, fadeY);
 
     gl_FragColor = vec4(col, 1.0);
@@ -85,22 +82,34 @@ const FRAG = /* glsl */`
 `
 
 function initGL(canvas) {
-  const gl = canvas.getContext('webgl', { antialias: false })
+  const gl = canvas.getContext('webgl')
   if (!gl) return null
 
   const compile = (type, src) => {
     const s = gl.createShader(type)
     gl.shaderSource(s, src)
     gl.compileShader(s)
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error('Shader error:', gl.getShaderInfoLog(s))
+      return null
+    }
     return s
   }
+
+  const vs = compile(gl.VERTEX_SHADER, VERT)
+  const fs = compile(gl.FRAGMENT_SHADER, FRAG)
+  if (!vs || !fs) return null
+
   const prog = gl.createProgram()
-  gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT))
-  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG))
+  gl.attachShader(prog, vs)
+  gl.attachShader(prog, fs)
   gl.linkProgram(prog)
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    console.error('Link error:', gl.getProgramInfoLog(prog))
+    return null
+  }
   gl.useProgram(prog)
 
-  // Full-screen quad
   const buf = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buf)
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW)
@@ -121,49 +130,76 @@ export default function HeroB() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = initGL(canvas)
-    if (!ctx) return
-    const { gl, uTime, uRes } = ctx
 
-    const resize = () => {
-      const w = canvas.clientWidth * window.devicePixelRatio
-      const h = canvas.clientHeight * window.devicePixelRatio
-      canvas.width = w
-      canvas.height = h
-      gl.viewport(0, 0, w, h)
-      gl.uniform2f(uRes, w, h)
-    }
-    resize()
-    window.addEventListener('resize', resize)
+    let ctx = null
+    let frameId = null
+    let start = 0
 
-    const start = performance.now()
-    let frameId
-    const render = () => {
-      frameId = requestAnimationFrame(render)
-      gl.uniform1f(uTime, (performance.now() - start) / 1000)
+    const render = (now) => {
+      if (!ctx) return
+      const { gl, uTime, uRes } = ctx
+      gl.uniform1f(uTime, (now - start) / 1000)
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+      frameId = requestAnimationFrame(render)
     }
-    render()
+
+    const setSize = () => {
+      const dpr = window.devicePixelRatio || 1
+      // clientWidth が 0 の場合は window を使用
+      const w = Math.round((canvas.clientWidth  || window.innerWidth)  * dpr)
+      const h = Math.round((canvas.clientHeight || window.innerHeight) * dpr)
+      if (w === 0 || h === 0) return false
+      canvas.width  = w
+      canvas.height = h
+      return true
+    }
+
+    // rAF 1フレーム待ってレイアウト確定後に初期化
+    const boot = () => {
+      if (!setSize()) { requestAnimationFrame(boot); return }
+
+      ctx = initGL(canvas)
+      if (!ctx) return
+
+      const { gl, uRes } = ctx
+      gl.viewport(0, 0, canvas.width, canvas.height)
+      gl.uniform2f(uRes, canvas.width, canvas.height)
+
+      start = performance.now()
+      frameId = requestAnimationFrame(render)
+    }
+    requestAnimationFrame(boot)
+
+    const onResize = () => {
+      if (!ctx) return
+      const ok = setSize()
+      if (!ok) return
+      ctx.gl.viewport(0, 0, canvas.width, canvas.height)
+      ctx.gl.uniform2f(ctx.uRes, canvas.width, canvas.height)
+    }
+    window.addEventListener('resize', onResize)
 
     return () => {
       cancelAnimationFrame(frameId)
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', onResize)
     }
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-black">
-      {/* WebGL shader canvas */}
+    <section
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+      style={{ background: '#112458' }}
+    >
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
         style={{ display: 'block' }}
       />
 
-      {/* Frosted glass overlay (optional subtle darkening on text side) */}
+      {/* 左側テキスト可読性オーバーレイ */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(105deg, rgba(4,13,31,0.62) 0%, rgba(4,13,31,0.25) 55%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(105deg, rgba(17,36,88,0.65) 0%, rgba(17,36,88,0.28) 55%, transparent 100%)' }}
       />
 
       {/* Content */}

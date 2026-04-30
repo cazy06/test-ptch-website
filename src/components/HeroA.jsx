@@ -159,7 +159,7 @@ export default function HeroA() {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden" style={{ background: '#040d1f' }}>
+    <section className="relative min-h-screen flex flex-col justify-center overflow-hidden" style={{ background: '#112458' }}>
       {/* Three.js canvas – full bleed background */}
       <canvas
         ref={canvasRef}
@@ -170,7 +170,7 @@ export default function HeroA() {
       {/* Radial vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, #040d1f 100%)' }}
+        style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, #112458 100%)' }}
       />
 
       {/* Content */}
