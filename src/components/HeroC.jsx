@@ -8,9 +8,9 @@ import { useEffect, useRef } from 'react'
 import { ArrowRight, Zap, Users, Cpu } from 'lucide-react'
 
 const personas = [
-  { icon: <Users size={20} />, label: '中小企業の経営者の方', desc: '業務デジタル化を検討中', href: '#zerosaaS' },
-  { icon: <Cpu size={20} />, label: 'デジタル推進担当の方', desc: 'AI活用・DX推進を担当', href: '#ai' },
-  { icon: <Zap size={20} />, label: 'パートナー企業の方', desc: '案件紹介・協業を検討中', href: '#partner' },
+  { icon: <Users size={20} />, label: '経営者の方', href: '#zerosaaS' },
+  { icon: <Cpu size={20} />, label: 'デジタル推進担当の方', href: '#ai' },
+  { icon: <Zap size={20} />, label: 'パートナー企業の方', href: '#partner' },
 ]
 
 const COLORS = ['#3E92CC', '#00C2CB', '#6fb8e8', '#FF8C42', '#ffffff']
@@ -254,27 +254,23 @@ export default function HeroC() {
             { num: '100%', label: 'スクラッチ開発' },
           ].map((s) => (
             <div key={s.label} className="text-white">
+              <p className="text-sm text-white/70 mb-1">{s.label}</p>
               <p className="text-4xl font-black">{s.num}</p>
-              <p className="text-sm text-white/70 mt-1">{s.label}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-16">
-          <p className="text-white/60 text-sm font-medium mb-4 uppercase tracking-widest">あなたはどちらですか？</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
             {personas.map((p) => (
               <a
                 key={p.label}
                 href={p.href}
-                className="group flex items-start gap-3 p-4 rounded-xl border border-white/20 backdrop-blur-sm text-white transition-all duration-200 bg-white/10 hover:bg-white/20"
+                className="group flex items-center gap-3 p-4 rounded-xl border border-white/20 backdrop-blur-sm text-white transition-all duration-200 bg-white/10 hover:bg-white/20"
               >
-                <div className="p-2 bg-white/10 rounded-lg mt-0.5">{p.icon}</div>
-                <div>
-                  <p className="text-sm font-bold leading-tight">{p.label}</p>
-                  <p className="text-xs text-white/60 mt-0.5">{p.desc}</p>
-                </div>
-                <ArrowRight size={16} className="ml-auto self-center text-white/40 group-hover:text-white/80 transition-colors" />
+                <div className="p-2 bg-white/10 rounded-lg">{p.icon}</div>
+                <p className="text-sm font-bold leading-tight">{p.label}</p>
+                <ArrowRight size={16} className="ml-auto text-white/40 group-hover:text-white/80 transition-colors" />
               </a>
             ))}
           </div>

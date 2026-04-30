@@ -51,10 +51,10 @@ export default function TrustBar() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map((stat) => (
             <div key={stat.label} className="text-white">
+              <p className="text-white/70 mb-2 text-sm font-medium">{stat.label}</p>
               <div className="text-4xl md:text-5xl font-black text-white">
                 <Counter target={stat.num} suffix={stat.suffix} prefix={stat.prefix || ''} />
               </div>
-              <p className="text-white/70 mt-2 text-sm font-medium">{stat.label}</p>
             </div>
           ))}
         </div>

@@ -34,11 +34,23 @@ export default function About() {
               </dl>
             </div>
 
-            {/* Map placeholder */}
-            <div className="mt-6 bg-gray-100 rounded-2xl h-48 flex items-center justify-center gap-3 text-gray-400">
-              <MapPin size={20} />
-              <span className="text-sm">神奈川県横浜市西区北幸 — JR横浜駅徒歩3分</span>
+            {/* Google Maps embed */}
+            <div className="mt-6 rounded-2xl overflow-hidden h-52 shadow-md">
+              <iframe
+                title="ポノテク株式会社 所在地"
+                src="https://maps.google.com/maps?q=神奈川県横浜市西区北幸2-10-28+むつみビル&z=17&output=embed&hl=ja"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-gray-500">
+              <MapPin size={13} />
+              JR横浜駅 西口より徒歩3分
+            </p>
           </div>
 
           {/* Mission & Vision */}

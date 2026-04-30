@@ -1,27 +1,9 @@
 import { ArrowRight, Zap, Users, Cpu } from 'lucide-react'
 
 const personas = [
-  {
-    icon: <Users size={20} />,
-    label: '中小企業の経営者の方',
-    desc: '業務デジタル化を検討中',
-    href: '#zerosaaS',
-    color: 'bg-white/10 hover:bg-white/20',
-  },
-  {
-    icon: <Cpu size={20} />,
-    label: 'デジタル推進担当の方',
-    desc: 'AI活用・DX推進を担当',
-    href: '#ai',
-    color: 'bg-white/10 hover:bg-white/20',
-  },
-  {
-    icon: <Zap size={20} />,
-    label: 'パートナー企業の方',
-    desc: '案件紹介・協業を検討中',
-    href: '#partner',
-    color: 'bg-white/10 hover:bg-white/20',
-  },
+  { icon: <Users size={20} />, label: '経営者の方', href: '#zerosaaS', color: 'bg-white/10 hover:bg-white/20' },
+  { icon: <Cpu size={20} />, label: 'デジタル推進担当の方', href: '#ai', color: 'bg-white/10 hover:bg-white/20' },
+  { icon: <Zap size={20} />, label: 'パートナー企業の方', href: '#partner', color: 'bg-white/10 hover:bg-white/20' },
 ]
 
 export default function Hero() {
@@ -87,34 +69,28 @@ export default function Hero() {
             { num: '100%', label: 'スクラッチ開発' },
           ].map((stat) => (
             <div key={stat.label} className="text-white">
+              <p className="text-sm text-white/70 mb-1">{stat.label}</p>
               <p className="text-4xl font-black text-white">{stat.num}</p>
-              <p className="text-sm text-white/70 mt-1">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Persona Cards */}
         <div className="mt-16">
-          <p className="text-white/60 text-sm font-medium mb-4 uppercase tracking-widest">
-            あなたはどちらですか？
-          </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
             {personas.map((p) => (
               <a
                 key={p.label}
                 href={p.href}
-                className={`group flex items-start gap-3 p-4 rounded-xl border border-white/20 backdrop-blur-sm text-white transition-all duration-200 ${p.color}`}
+                className={`group flex items-center gap-3 p-4 rounded-xl border border-white/20 backdrop-blur-sm text-white transition-all duration-200 ${p.color}`}
               >
-                <div className="p-2 bg-white/10 rounded-lg mt-0.5 text-white">
+                <div className="p-2 bg-white/10 rounded-lg text-white">
                   {p.icon}
                 </div>
-                <div>
-                  <p className="text-sm font-bold leading-tight">{p.label}</p>
-                  <p className="text-xs text-white/60 mt-0.5">{p.desc}</p>
-                </div>
+                <p className="text-sm font-bold leading-tight">{p.label}</p>
                 <ArrowRight
                   size={16}
-                  className="ml-auto self-center text-white/40 group-hover:text-white/80 transition-colors"
+                  className="ml-auto text-white/40 group-hover:text-white/80 transition-colors"
                 />
               </a>
             ))}

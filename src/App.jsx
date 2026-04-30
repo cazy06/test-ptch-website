@@ -9,7 +9,6 @@ import TrustBar from './components/TrustBar'
 import Services from './components/Services'
 import Cases from './components/Cases'
 import Process from './components/Process'
-import JourneyBanner from './components/JourneyBanner'
 import Partner from './components/Partner'
 import About from './components/About'
 import FAQ from './components/FAQ'
@@ -85,8 +84,7 @@ function App({ defaultHero = 'current' }) {
         <Services />
         <Cases />
         <Process />
-        <JourneyBanner />
-        <Partner />
+<Partner />
         <About />
         <FAQ />
         <Contact />
